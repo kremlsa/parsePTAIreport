@@ -3,13 +3,26 @@ package main
 import (
 	"encoding/json"
 	"log"
+	"os"
+	"strings"
 
-	"github.com/kremlsa/parsePTAIreport/ptai"
 	fileutils "github.com/kremlsa/parsePTAIreport/fileutils"
+	"github.com/kremlsa/parsePTAIreport/ptai"
 )
 
 func main() {
-	filename := "ptaiReport.json"
+	// Проверяем количество переданных аргументов
+	if len(os.Args) < 2 {
+		log.Fatal("No file specified")
+	}
+
+	// Проверяем является ли аргумент json файлом
+	if !strings.HasSuffix(os.Args[1], ".json") {
+		log.Fatal("Wrong extension")
+	}
+
+	// Инициализируем параметры подключения из аргументов командной строки
+	filename := os.Args[1]
 	data, err := fileutils.Read(filename)
 	if err != nil {
 		log.Fatal(err)
